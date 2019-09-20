@@ -12,7 +12,7 @@ let unit = 'us';
 
 export const setCurrentWeather = newWeather => {
   currentWeather = newWeather;
-  console.log(currentWeather);
+  // console.log(currentWeather);
   render();
 }
 
