@@ -14,7 +14,19 @@ export const setCurrentWeather = newWeather => {
   currentWeather = newWeather;
   // console.log(currentWeather);
   render();
+};
+
+export const setCurrentUnit = newUnit => {
+  unit = newUnit;
+  render();
 }
+
+const whichTemp = weather => {
+  if (weather.temperature) {
+    return weather.temperature;
+  }
+  return Math.round((weather.temperatureHigh + weather.temperatureLow) / 2);
+};
 
 const render = _ => {
   $currentIcon.innerHTML = getAnimatedIcon(currentWeather.icon);
@@ -22,5 +34,5 @@ const render = _ => {
   $windSpeed.textContent = Math.round(currentWeather.windSpeed);
   $humidity.textContent = Math.round(currentWeather.humidity * 100);
   $precipitation.textContent = Math.round(currentWeather.precipProbability * 100);
-  $tempNum.innerHTML = `${toCelFah(currentWeather.temperature, unit)}&#176;`
+  $tempNum.innerHTML = `${toCelFah(whichTemp(currentWeather), unit)}&#176;`
 }

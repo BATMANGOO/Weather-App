@@ -1,6 +1,7 @@
 'use strict';
 import { setCurrentWeather } from './current';
 import { fahToKel } from '../utils/utils';
+import { setMultiWeather } from './multi';
 
 const GEOCODE_KEY = 'AIzaSyDjojPV5hBjIQjoanGEKfKZNUsi-1_wkws';
 const DARK_SKY_KEY = 'bcaec5b41a56835176be8a81364f0c3c';
@@ -36,10 +37,22 @@ const updateWeather = async query => {
     const {lat, lng} = await getLatLng(address);
     const weatherData = await getWeatherData(lat, lng);
     $spinnerWrapper.classList.toggle("spinner-wrapper--active")
+
     const weatherCurrent = weatherData.currently;
     weatherCurrent.temperature = fahToKel(weatherCurrent.temperature);
     // console.log(weatherCurrent);
     setCurrentWeather(weatherCurrent);
+
+    const weatherMulti = weatherData.daily.data.map(elem => {
+      elem.temperatureHigh = fahToKel(elem.temperatureHigh);
+      elem.temperatureLow = fahToKel(elem.temperatureLow);
+      return elem;
+    });
+
+    weatherMulti[0].temperature = weatherCurrent.temperature;
+    weatherMulti[0].summary = weatherCurrent.summary;
+
+    setMultiWeather(weatherMulti);
 };
 
 const getWeatherData = async(lat, lng) => {
